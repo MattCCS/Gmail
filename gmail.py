@@ -32,7 +32,7 @@ def send_email(email_to,
     msg['Reply-To'] = reply_to if reply_to else email_from
     msg['Subject'] = email_subject + ((" " + datetime.date.today().strftime(DATE_FORMAT)) if withDate else "")
 
-    msg.attach( email.MIMEText.MIMEText(email_body + "\n\n") )
+    msg.attach( email.MIMEText.MIMEText('\n' + email_body) )
 
     # mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
     mail = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
