@@ -5,8 +5,8 @@ import os
 import smtplib
 
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 465 # SSL. old was 587
+SMTP_SERVER = os.environ['SMTP_SERVER']
+SMTP_PORT = int(os.environ['SMTP_PORT'])
 SMTP_USERNAME = os.environ['SMTP_USERNAME']
 SMTP_PASSWORD = os.environ['SMTP_PASSWORD']
 
@@ -34,8 +34,13 @@ def send_email(email_to,
 
     msg.attach( email.MIMEText.MIMEText('\n' + email_body) )
 
-    # mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    mail = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
+    if SMTP_PORT == 587:
+        mail = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    elif SMTP_PORT == 465:
+        mail = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
+    else:
+        raise RuntimeError("unknown SMTP_PORT")
+
     mail.ehlo() # !!!
     # mail.starttls()
     mail.login(SMTP_USERNAME, SMTP_PASSWORD)
